@@ -1,3 +1,5 @@
+'''Backend da página do processador de imagens. Administra entrada e saída de arquivos'''
+
 from flask import Flask, request, send_file, render_template
 from werkzeug.utils import secure_filename
 import os
@@ -69,8 +71,8 @@ def process_file():
 
     # Abrir arquivo original
     with open(input_file_path, 'rb') as fileread:
-        data = fileread.read()
-    output_data = modificar_arquivo(data, option)
+        input_file_data = fileread.read()
+    output_file_data = modificar_arquivo(input_file_data, option)
 
 
     # Salvar arquivo modificado
@@ -81,13 +83,14 @@ def process_file():
     # Process file and option (Add your logic here)
     #processed_filename = 'processed_output.txt'
     with open(output_file_path, 'wb') as filewrite:
-        filewrite.write(output_data)
+        filewrite.write(output_file_data)
     
     # Enviar arquivo
     #return send_file(output_file_path, as_attachment=True)
     return uploaded_file(output_file_path)
 
-    #render_template('frontend.html', input_image)
+    #input_image = input_file_path
+    #render_template('frontend.html')
 
 def modificar_arquivo(dados:bytes = b'', opcao:int = 0):
     return dados # Retornar o mesmo arquivo por enquanto

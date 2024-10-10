@@ -10,20 +10,16 @@
 
     <label>Select option:</label><br>
     <input type="radio" id="option1" name="option" value="1">
-    <label for="option1">Opção 1</label><br>
+    <label for="option1">Option 1</label><br>
     <input type="radio" id="option2" name="option" value="2">
-    <label for="option2">Opção 2</label><br><br>
+    <label for="option2">Option 2</label><br><br>
 
-    <input type="submit" value="Carregar">
+    <input type="submit" value="Upload and Process">
 
-  </form action="/process" method="post" enctype="multipart/form-data">
-    <input type="submit" value="Processar">
+
+
+
+    <img src="{{ input_image }}" alt="Imagem de entradapy">
   </form>
-
-  <div>
-    {% if input_image %}
-        <img src="{{ input_image }}" alt="input image">
-    {% endif %}
-  </div>
 </body>
 </html>

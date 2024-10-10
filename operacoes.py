@@ -1,0 +1,1 @@
+'''Neste arquivo estão localizados os métodos de alteração de arquivo'''

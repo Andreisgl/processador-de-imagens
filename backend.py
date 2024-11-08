@@ -26,7 +26,7 @@ app.config['DIR_SAIDA'] = DIR_SAÍDA
 
 entrada_arquivo_nome = ''
 entrada_arquivo_path = ''
-option = 0
+#option = 0
 
 
 @app.route("/")
@@ -38,7 +38,6 @@ def home():
 def upload_file():
     global entrada_arquivo_nome
     global entrada_arquivo_path
-    global option
 
     # Verificar se o arquivo original está presente
     if 'input_file' not in request.files:
@@ -46,7 +45,6 @@ def upload_file():
 
     file = request.files['input_file']
     entrada_arquivo_nome = secure_filename(file.filename)  # Validar nome de arquivo
-    option = request.form.get('option')
 
     # Salvar o arquivo original
     entrada_arquivo_path = os.path.join(app.config['INPUT_FOLDER'], entrada_arquivo_nome)
@@ -57,7 +55,7 @@ def upload_file():
         input_file_data = fileread.read()
 
     # Modificar dados para arquivo de saída
-    output_file_data = modificar_arquivo(input_file_data, option)
+    output_file_data = modificar_arquivo(input_file_data)
 
     # Definir nome do arquivo de saída
     prefixo = 'out'
@@ -70,7 +68,7 @@ def upload_file():
     #return send_file(input_file_path, as_attachment=True) # Enviar o mesmo arquivo sem modificações
     return send_file(output_file_path, as_attachment=True) # Enviar o arquivo sem modificações
 
-def modificar_arquivo(entrada = b'', opcao:int = 0):
+def modificar_arquivo(entrada = b''):
     dados = '' 
     dados = ops.resolver(entrada.decode('utf-8'))
 

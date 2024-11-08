@@ -10,22 +10,22 @@ import os
 app = Flask(__name__)
 
 # Diretório dos arquivos de entrada
-INPUT_FOLDER = 'input_folder'
-INPUT_FOLDER = os.path.join('./', INPUT_FOLDER)
-if not os.path.exists(INPUT_FOLDER):
-    os.mkdir(INPUT_FOLDER)
-app.config['INPUT_FOLDER'] = INPUT_FOLDER
+DIR_ENTRADA = 'dir_entrada'
+DIR_ENTRADA = os.path.join('./', DIR_ENTRADA)
+if not os.path.exists(DIR_ENTRADA):
+    os.mkdir(DIR_ENTRADA)
+app.config['INPUT_FOLDER'] = DIR_ENTRADA
 
 # Diretório dos arquivos de saída
-OUTPUT_FOLDER = 'output_folder'
-OUTPUT_FOLDER = os.path.join('./', OUTPUT_FOLDER)
-if not os.path.exists(OUTPUT_FOLDER):
-    os.mkdir(OUTPUT_FOLDER)
-app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
+DIR_SAÍDA = 'dir_saida'
+DIR_SAÍDA = os.path.join('./', DIR_SAÍDA)
+if not os.path.exists(DIR_SAÍDA):
+    os.mkdir(DIR_SAÍDA)
+app.config['DIR_SAIDA'] = DIR_SAÍDA
 
 
-input_file_name = ''
-input_file_path = ''
+entrada_arquivo_nome = ''
+entrada_arquivo_path = ''
 option = 0
 
 
@@ -36,8 +36,8 @@ def home():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    global input_file_name
-    global input_file_path
+    global entrada_arquivo_nome
+    global entrada_arquivo_path
     global option
 
     # Verificar se o arquivo original está presente
@@ -45,27 +45,15 @@ def upload_file():
         return 'No file uploaded', 400
 
     file = request.files['input_file']
-    input_file_name = secure_filename(file.filename)  # Secure the filename
+    entrada_arquivo_nome = secure_filename(file.filename)  # Validar nome de arquivo
     option = request.form.get('option')
 
     # Salvar o arquivo original
-    input_file_path = os.path.join(app.config['INPUT_FOLDER'], input_file_name)
-    file.save(input_file_path)
-
-    # Exibir arquivo original
-    #return render_template('frontend.html', input_image=f'/uploads/{input_file_name}')
-    #return send_file(input_file_path, as_attachment=True) # Enviar o mesmo arquivo sem modificações
-
-
-
-
-    # Salvar arquivo original
-    #input_file_path = os.path.join(INPUT_FOLDER, input_file_name)
-    #with open(input_file_path, 'wb') as filewrite:
-    #    filewrite.write(file.stream.read())
+    entrada_arquivo_path = os.path.join(app.config['INPUT_FOLDER'], entrada_arquivo_nome)
+    file.save(entrada_arquivo_path)
     
     # Abrir arquivo original
-    with open(input_file_path, 'rb') as fileread:
+    with open(entrada_arquivo_path, 'rb') as fileread:
         input_file_data = fileread.read()
 
     # Modificar dados para arquivo de saída
@@ -73,14 +61,13 @@ def upload_file():
 
     # Definir nome do arquivo de saída
     prefixo = 'out'
-    output_file_name = f'{prefixo}_{input_file_name}'
-    output_file_path = os.path.join(OUTPUT_FOLDER, output_file_name)
+    output_file_name = f'{prefixo}_{entrada_arquivo_nome}'
+    output_file_path = os.path.join(DIR_SAÍDA, output_file_name)
     # Salvar arquivo de saída
     with open(output_file_path, 'wb') as filewrite:
         filewrite.write(output_file_data)
     
     #return send_file(input_file_path, as_attachment=True) # Enviar o mesmo arquivo sem modificações
-
     return send_file(output_file_path, as_attachment=True) # Enviar o arquivo sem modificações
 
 def modificar_arquivo(entrada = b'', opcao:int = 0):

@@ -1,6 +1,5 @@
 '''Neste arquivo estão localizados os métodos de alteração de arquivo'''
 
-import numpy as np
 from asteval import Interpreter
 
 

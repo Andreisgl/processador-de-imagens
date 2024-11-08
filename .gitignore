@@ -1,6 +1,6 @@
 # Arquivos e diretórios do projeto
-/input_folder
-/output_folder
+/dir_entrada
+/dir_saida
 
 
 # Byte-compiled / optimized / DLL files

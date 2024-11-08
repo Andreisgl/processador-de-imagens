@@ -1,8 +1,11 @@
 '''Backend da página do processador de imagens. Administra entrada e saída de arquivos'''
 
+import operacoes as ops
+
 from flask import Flask, request, send_file, render_template
 from werkzeug.utils import secure_filename
 import os
+
 
 app = Flask(__name__)
 
@@ -51,14 +54,34 @@ def upload_file():
 
     # Exibir arquivo original
     #return render_template('frontend.html', input_image=f'/uploads/{input_file_name}')
-    return send_file(input_file_path, as_attachment=True) # Enviar o mesmo arquivo sem modificações
+    #return send_file(input_file_path, as_attachment=True) # Enviar o mesmo arquivo sem modificações
+
+
 
 
     # Salvar arquivo original
     #input_file_path = os.path.join(INPUT_FOLDER, input_file_name)
     #with open(input_file_path, 'wb') as filewrite:
     #    filewrite.write(file.stream.read())
+    
+    # Abrir arquivo original
+    with open(input_file_path, 'rb') as fileread:
+        input_file_data = fileread.read()
+
+    # Modificar dados para arquivo de saída
+    output_file_data = modificar_arquivo(input_file_data, option)
+
+    # Definir nome do arquivo de saída
+    prefixo = 'out'
+    output_file_name = f'{prefixo}_{input_file_name}'
+    output_file_path = os.path.join(OUTPUT_FOLDER, output_file_name)
+    # Salvar arquivo de saída
+    with open(output_file_path, 'wb') as filewrite:
+        filewrite.write(output_file_data)
+    
     #return send_file(input_file_path, as_attachment=True) # Enviar o mesmo arquivo sem modificações
+
+    return send_file(output_file_path, as_attachment=True) # Enviar o arquivo sem modificações
 
 
 
@@ -74,26 +97,29 @@ def process_file():
         input_file_data = fileread.read()
     output_file_data = modificar_arquivo(input_file_data, option)
 
-
+#
     # Salvar arquivo modificado
     prefixo = 'out'
     output_file_name = f'{prefixo}_{input_file_name}'
     output_file_path = os.path.join(OUTPUT_FOLDER, output_file_name)
-
+#
     # Process file and option (Add your logic here)
     #processed_filename = 'processed_output.txt'
     with open(output_file_path, 'wb') as filewrite:
         filewrite.write(output_file_data)
     
     # Enviar arquivo
-    #return send_file(output_file_path, as_attachment=True)
-    return uploaded_file(output_file_path)
+    return send_file(output_file_path, as_attachment=True)
+    #return uploaded_file(output_file_path)
 
     #input_image = input_file_path
     #render_template('frontend.html')
 
-def modificar_arquivo(dados:bytes = b'', opcao:int = 0):
-    return dados # Retornar o mesmo arquivo por enquanto
+def modificar_arquivo(entrada = b'', opcao:int = 0):
+    dados = '' 
+    dados = ops.resolver(str(entrada))
+
+    return bytes(dados, 'utf-8') # Retornar o mesmo arquivo por enquanto
 
 # Serve the uploaded files via a route
 @app.route('/uploads/<filename>')

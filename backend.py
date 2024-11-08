@@ -83,48 +83,11 @@ def upload_file():
 
     return send_file(output_file_path, as_attachment=True) # Enviar o arquivo sem modificações
 
-
-
-
-@app.route('/process', methods=['POST'])
-def process_file():
-    global input_file_name
-    global input_file_path
-    global option
-
-    # Abrir arquivo original
-    with open(input_file_path, 'rb') as fileread:
-        input_file_data = fileread.read()
-    output_file_data = modificar_arquivo(input_file_data, option)
-
-#
-    # Salvar arquivo modificado
-    prefixo = 'out'
-    output_file_name = f'{prefixo}_{input_file_name}'
-    output_file_path = os.path.join(OUTPUT_FOLDER, output_file_name)
-#
-    # Process file and option (Add your logic here)
-    #processed_filename = 'processed_output.txt'
-    with open(output_file_path, 'wb') as filewrite:
-        filewrite.write(output_file_data)
-    
-    # Enviar arquivo
-    return send_file(output_file_path, as_attachment=True)
-    #return uploaded_file(output_file_path)
-
-    #input_image = input_file_path
-    #render_template('frontend.html')
-
 def modificar_arquivo(entrada = b'', opcao:int = 0):
     dados = '' 
     dados = ops.resolver(str(entrada))
 
     return bytes(dados, 'utf-8') # Retornar o mesmo arquivo por enquanto
-
-# Serve the uploaded files via a route
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_file(os.path.join(app.config['INPUT_FOLDER'], filename))
 
 if __name__ == "__main__":
     app.run(debug=True)

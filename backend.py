@@ -85,7 +85,7 @@ def upload_file():
 
 def modificar_arquivo(entrada = b'', opcao:int = 0):
     dados = '' 
-    dados = ops.resolver(str(entrada))
+    dados = ops.resolver(entrada.decode('utf-8'))
 
     return bytes(dados, 'utf-8') # Retornar o mesmo arquivo por enquanto
 
